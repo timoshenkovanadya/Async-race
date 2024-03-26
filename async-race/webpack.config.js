@@ -22,10 +22,15 @@ const baseConfig = {
                 test: /\.(scss|css)$/i,
                 use: [miniCssExtractPlugin.loader, "css-loader", "sass-loader"],
             },
-            {
-                test: /\.(ico|gif|png|jpg|jpeg|svg)$/i,
-                type: "asset/inline",
-            },
+            // {
+            //     test: /\.(ico|gif|png|jpg|jpeg|svg)$/i,
+            //     type: "asset/inline",
+            // },
+            // {
+            //     test: /\.svg$/i,
+            //     use: 'svg-url-loader',
+            // },
+            
             {
                 test: /\.tsx?$/,
                 use: "ts-loader",
@@ -46,14 +51,15 @@ const baseConfig = {
         new htmlWebpackPlugin({ title: "Async Race"}),
         new miniCssExtractPlugin({ filename: "[name].css" }),
         new CleanWebpackPlugin(),
-        // new CopyPlugin({
-        //     patterns: [
-        //         {
-        //             from: "src/images/",
-        //             to: "./assets/images",
-        //         },
-        //     ],
-        // }),
+        // new HtmlWebpackInlineSVGPlugin(),
+        new CopyPlugin({
+            patterns: [
+                {
+                    from: "src/assets/",
+                    to: "assets",
+                },
+            ],
+        }),
     ],
 };
 

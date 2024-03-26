@@ -19,7 +19,6 @@
             "pre-push": "npm run lint"
         }
     },
-    
     "author": "Nadya Amialchuk",
     "license": "ISC",
     "devDependencies": {
