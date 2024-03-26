@@ -1,22 +1,22 @@
 
 export class CreationForm {
-    private formContainer: HTMLElement;
+    public formContainer: HTMLElement;
 
-    private createContainer: HTMLElement;
+    public createContainer: HTMLElement;
 
-    private updContainer: HTMLElement;
+    public updContainer: HTMLElement;
 
-    private createInput: HTMLInputElement;
+    public createInput: HTMLInputElement;
 
-    private updInput: HTMLInputElement;
+    public updInput: HTMLInputElement;
 
-    private createButton: HTMLButtonElement;
+    public createButton: HTMLButtonElement;
 
-    private updButton: HTMLButtonElement;
+    public updButton: HTMLButtonElement;
 
-    private createColorInput: HTMLInputElement;
+    public createColorInput: HTMLInputElement;
 
-    private updColorInput: HTMLInputElement;
+    public updColorInput: HTMLInputElement;
 
     constructor () {
         this.formContainer = document.createElement('div');

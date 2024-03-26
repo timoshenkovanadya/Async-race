@@ -3,37 +3,48 @@ import createCarImg from "../../../../utils/createCarImg";
 import { AutosPropsType } from "./autos.types";
 
 export class Autos extends BaseComponent {
-    private svg: SVGSVGElement;
+    public svg: SVGSVGElement;
+
+    public selectButton: BaseComponent;
+
+    public removeButton: BaseComponent;
+
+    public startButton: BaseComponent;
+
+    public stopButton: BaseComponent;
+
+    public carModel: BaseComponent;
+
 
     constructor(props: AutosPropsType) {
         super(props);
 
-        new BaseComponent({
+       this.selectButton = new BaseComponent({
             tagName: "button",
             textContent: "Select",
             classNames: "select-button",
             parentNode: this.element,
         });
-        new BaseComponent({
+       this.removeButton =  new BaseComponent({
             tagName: "button",
             textContent: "Remove",
             classNames: "remove-button",
             parentNode: this.element,
         });
-        new BaseComponent({
+        this.startButton = new BaseComponent({
             tagName: "button",
             textContent: "A",
             classNames: "start-button",
             parentNode: this.element,
         });
-        new BaseComponent({
+        this.stopButton = new BaseComponent({
             tagName: "button",
             textContent: "B",
             classNames: "stop-button",
             parentNode: this.element,
         });
 
-        new BaseComponent({
+       this.carModel = new BaseComponent({
             tagName: "h6",
             textContent: "Tesla",
             classNames: "car-model",

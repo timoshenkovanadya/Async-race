@@ -3,30 +3,39 @@ import { RacePropsType } from "./race.types";
 
 
 export class Race extends BaseComponent {
+
+    public raceTitle: BaseComponent;
+
+    public pageNumber: BaseComponent;
+
+    public prevButton: BaseComponent;
+
+    public nextButton: BaseComponent;
+
     constructor(props: RacePropsType) {
         super(props);
-        new BaseComponent({
+        this.raceTitle = new BaseComponent({
             tagName: "h4",
             textContent: "Garage (9)",
             classNames: "race-title",
             parentNode: this.element,
         });
 
-        new BaseComponent({
+        this.pageNumber = new BaseComponent({
             tagName: "h5",
             textContent: "Page #1",
-            classNames: "race-title-page",
+            classNames: "pageNumber",
             parentNode: this.element,
         });
 
-        new BaseComponent({
+        this.prevButton = new BaseComponent({
             tagName: "button",
             textContent: "Prev",
             classNames: "prev-button",
             parentNode: this.element,
         });
         
-        new BaseComponent({
+       this.nextButton = new BaseComponent({
             tagName: "button",
             textContent: "Next",
             classNames: "next-button",

@@ -37,12 +37,12 @@ export class App {
     renderGarage = (): void => {
         this.appContainer.innerHTML = "";
         this.garage.render(this.appContainer);
-        // this.appContainer.append(this.garage as unknown as HTMLElement);
+        
     };
 
     renderWinners = (): void => {
         this.appContainer.innerHTML = "";
         this.winners.render(this.appContainer);
-        // this.appContainer.append(this.garage as unknown as HTMLElement);
+        
     };
 }
