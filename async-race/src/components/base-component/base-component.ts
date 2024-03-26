@@ -1,4 +1,4 @@
-interface BaseComponentProps {
+export interface BaseComponentProps {
     tagName: string;
     classNames?: string | string[];
     textContent?: string | null;
@@ -34,11 +34,12 @@ export class BaseComponent<T extends HTMLElement = HTMLElement> {
 
     render(parent: HTMLElement | BaseComponent): void {
         if (parent instanceof HTMLElement) {
-           parent.append(this.element);
+            parent.append(this.element);
         } else parent.insertChild(this.getElement());
     }
 
     setClassName(classNames: string[] | string) {
+        if (!classNames) return;
         if (typeof classNames === "string") {
             this.element.classList.add(classNames);
         } else {
@@ -59,7 +60,7 @@ export class BaseComponent<T extends HTMLElement = HTMLElement> {
     }
 
     insertChild(child: HTMLElement | BaseComponent): void {
-        if (child instanceof HTMLElement) {
+        if (child instanceof HTMLElement || child instanceof SVGSVGElement) {
             this.element.append(child);
         } else this.element.append(child.getElement());
     }

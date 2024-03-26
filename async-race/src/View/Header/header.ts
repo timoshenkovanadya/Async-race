@@ -1,3 +1,4 @@
+
 export class Header {
     private headerContainer: HTMLElement;
     
@@ -5,11 +6,14 @@ export class Header {
 
     private winnersButton: HTMLButtonElement;
 
+   
     constructor () {
+
         this.headerContainer = document.createElement("div");
         this.headerContainer.className = 'header';
         this.garageButton = this.addHeaderButton('to garage');
         this.winnersButton = this.addHeaderButton('to winners');
+       
     }
 
     addHeaderButton(text: string): HTMLButtonElement {
