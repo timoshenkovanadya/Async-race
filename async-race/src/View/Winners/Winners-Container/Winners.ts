@@ -2,7 +2,7 @@ import { BaseComponent } from "../../../Components/Base-component/base-component
 import { WinnersPropsType } from "./winners.types";
 
 
-export class WinnersContainer extends BaseComponent {
+export class Winners extends BaseComponent {
     constructor(props: WinnersPropsType) {
         super(props);
         new BaseComponent({

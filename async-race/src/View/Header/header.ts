@@ -1,25 +1,26 @@
 
+
 export class Header {
-    private headerContainer: HTMLElement;
+    public headerContainer: HTMLElement;
+
+    public garageButton: HTMLButtonElement;
+
+    public winnersButton: HTMLButtonElement;
+
     
-    private garageButton: HTMLButtonElement;
 
-    private winnersButton: HTMLButtonElement;
-
-   
-    constructor () {
-
+    constructor() {
         this.headerContainer = document.createElement("div");
-        this.headerContainer.className = 'header';
-        this.garageButton = this.addHeaderButton('to garage');
-        this.winnersButton = this.addHeaderButton('to winners');
-       
+        this.headerContainer.className = "header";
+        this.garageButton = this.addHeaderButton("to garage");
+        this.winnersButton = this.addHeaderButton("to winners");
+        
     }
 
     addHeaderButton(text: string): HTMLButtonElement {
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.className = 'header_button';
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "header_button";
         button.textContent = text;
         this.headerContainer.appendChild(button);
         return button;
@@ -28,5 +29,6 @@ export class Header {
     renderHeader(parent: HTMLElement): void {
         parent.appendChild(this.headerContainer);
     }
+
 
 }
