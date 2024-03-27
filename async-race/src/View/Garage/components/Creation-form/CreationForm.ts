@@ -18,6 +18,12 @@ export class CreationForm {
 
     public updColorInput: HTMLInputElement;
 
+    public raceButton: HTMLButtonElement;
+
+    public resetButton: HTMLButtonElement;
+
+    public generateCarsButton: HTMLButtonElement;
+
     constructor () {
         this.formContainer = document.createElement('div');
         this.formContainer.className = 'form-container';
@@ -38,6 +44,11 @@ export class CreationForm {
 
         this.createButton = this.addButton('create', this.createContainer);
         this.updButton = this.addButton('update', this.updContainer);
+
+        this.raceButton = this.addButton('race', this.formContainer);
+        this.resetButton = this.addButton('reset', this.formContainer);
+        this.generateCarsButton = this.addButton('generate', this.formContainer);
+
     }
 
     addInput(inputName: string, parent: HTMLElement): HTMLInputElement {

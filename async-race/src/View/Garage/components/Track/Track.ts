@@ -15,7 +15,7 @@ export class Track extends BaseComponent {
 
     public carModel: BaseComponent;
 
-    public carId: number;
+    public carId?: number;
 
     constructor({ id, color, name, ...props }: TrackPropsType) {
         super({ tagName: "div", ...props });
