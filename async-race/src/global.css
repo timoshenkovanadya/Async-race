@@ -11,7 +11,7 @@ body {
 .race-title {
     color: aliceblue;
 }
-.race-title-page {
+.page-number {
     color: aliceblue;
 }
 
@@ -23,4 +23,6 @@ body {
 .car-model {
     color:aliceblue;
 }
+
+
 

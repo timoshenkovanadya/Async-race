@@ -28,7 +28,7 @@ export class Race extends BaseComponent {
         this.pageNumber = new BaseComponent({
             tagName: "h5",
             textContent: "Page #1",
-            classNames: "pageNumber",
+            classNames: "page-number",
             parentNode: this.element,
         });
 
@@ -56,5 +56,14 @@ export class Race extends BaseComponent {
 
     changeCarsCount = (count: string) => {
         this.raceTitle.setTextContent(`Garage (${count || 0})`);
+    };
+
+    changePageCount = (count: string) => {
+        const Num = Number(count);
+        console.log(Num);
+        const page = Num / 7;
+        const pageNum = (Math.floor(page) + 1).toString();
+        console.log(pageNum);
+        this.pageNumber.setTextContent(`Page # (${pageNum || 0})`);
     };
 }

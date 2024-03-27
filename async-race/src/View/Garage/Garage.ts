@@ -23,5 +23,7 @@ export class Garage extends BaseComponent {
         const { cars, count } = await apiController.getCars({ _limit: 7, _page: 0 });
         this.race.renderTracks(cars);
         this.race.changeCarsCount(count);
+        this.race.changePageCount(count);
+
     };
 }
