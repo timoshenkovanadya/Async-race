@@ -66,4 +66,10 @@ export class Race extends BaseComponent {
         console.log(pageNum);
         this.pageNumber.setTextContent(`Page # (${pageNum || 0})`);
     };
+
+    clearAllTracks = () => {
+        this.carsData = [];
+        this.trackInstances.forEach((track) => track.destroy());
+        this.trackInstances = [];
+    };
 }

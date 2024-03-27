@@ -22,6 +22,8 @@ export class Track extends BaseComponent {
 
         this.carId = id;
 
+        this.element.className = 'track-container';
+
         this.selectButton = new BaseComponent({
             tagName: "button",
             textContent: "Select",
@@ -34,6 +36,7 @@ export class Track extends BaseComponent {
             classNames: "remove-button",
             parentNode: this.element,
         });
+               
         this.startButton = new BaseComponent({
             tagName: "button",
             textContent: "A",
@@ -54,7 +57,8 @@ export class Track extends BaseComponent {
             parentNode: this.element,
         });
 
-        this.svg = createCarImg(color, "30", "100");
+        this.svg = createCarImg(color, "80", "30");
         this.insertChild(this.svg as unknown as HTMLElement);
+        
     }
 }
