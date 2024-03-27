@@ -15,14 +15,14 @@ export class Track extends BaseComponent {
 
     public carModel: BaseComponent;
 
-    public carId?: number;
+    public carId: number;
 
     constructor({ id, color, name, ...props }: TrackPropsType) {
         super({ tagName: "div", ...props });
 
         this.carId = id;
 
-        this.element.className = 'track-container';
+        this.element.className = "track-container";
 
         this.selectButton = new BaseComponent({
             tagName: "button",
@@ -36,7 +36,7 @@ export class Track extends BaseComponent {
             classNames: "remove-button",
             parentNode: this.element,
         });
-               
+
         this.startButton = new BaseComponent({
             tagName: "button",
             textContent: "A",
@@ -59,6 +59,5 @@ export class Track extends BaseComponent {
 
         this.svg = createCarImg(color, "80", "30");
         this.insertChild(this.svg as unknown as HTMLElement);
-        
     }
 }

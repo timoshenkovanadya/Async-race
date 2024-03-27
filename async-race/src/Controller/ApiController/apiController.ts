@@ -1,4 +1,4 @@
-import { CarType } from "../../View/Garage/garage.types";
+import { CarType, CreateCarType } from "../../View/Garage/garage.types";
 import { createQueryString } from "../../utils/createQueryString";
 import { GetCarsQueryType } from "./apiController.types";
 
@@ -14,7 +14,7 @@ export const apiController = {
         return { cars, count } as { cars: CarType[]; count: string };
     },
 
-    addCar: async (carData: CarType): Promise<void> => {
+    addCar: async (carData: CreateCarType): Promise<void> => {
         await fetch(`${BASE_URL}/garage`, {
             method: "POST",
             headers: {

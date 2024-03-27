@@ -1,4 +1,5 @@
 import { BaseComponent } from "../../../../Components/Base-component/base-component";
+import { apiController } from "../../../../Controller/ApiController/apiController";
 import { CarType } from "../../garage.types";
 import { Track } from "../Track/Track";
 import { RacePropsType } from "./race.types";
@@ -49,9 +50,29 @@ export class Race extends BaseComponent {
         this.trackInstances = [];
     }
 
+    deleteTrack = (id: number) => {
+        return () => {
+            console.log("HERE");
+            apiController.deleteCar(id).then(() => {
+                this.renderTracksInRace();
+            });
+        };
+    };
+
     renderTracks = (carsArr: CarType[]) => {
         this.carsData = carsArr;
         this.trackInstances = carsArr.map((car) => new Track({ parentNode: this.element, ...car }));
+        this.trackInstances.forEach((track) => {
+            track.removeButton.setOnclick(this.deleteTrack(track.carId));
+        });
+    };
+
+    renderTracksInRace = async () => {
+        const { cars, count } = await apiController.getCars({ _limit: 7, _page: 0 });
+        this.clearAllTracks();
+        this.renderTracks(cars);
+        this.changeCarsCount(count);
+        this.changePageCount(count);
     };
 
     changeCarsCount = (count: string) => {
