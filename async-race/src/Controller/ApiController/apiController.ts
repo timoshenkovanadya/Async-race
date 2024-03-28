@@ -24,8 +24,8 @@ export const apiController = {
         });
     },
 
-    updateCar: async (carData: CarType, id: number): Promise<void> => {
-        await fetch(`${BASE_URL}/garage/${id}`, {
+    updateCar: async (carData: CarType): Promise<void> => {
+        await fetch(`${BASE_URL}/garage/${carData.id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",

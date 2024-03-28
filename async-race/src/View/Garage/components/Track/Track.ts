@@ -1,5 +1,6 @@
 import { BaseComponent } from "../../../../Components/Base-component/base-component";
 import createCarImg from "../../../../utils/createCarImg";
+import { CarType } from "../../garage.types";
 import { TrackPropsType } from "./track.types";
 
 export class Track extends BaseComponent {
@@ -17,10 +18,14 @@ export class Track extends BaseComponent {
 
     public carId: number;
 
+    public carData: CarType;
+
     constructor({ id, color, name, ...props }: TrackPropsType) {
         super({ tagName: "div", ...props });
 
         this.carId = id;
+
+        this.carData = { id, color, name };
 
         this.element.className = "track-container";
 

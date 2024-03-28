@@ -3,7 +3,7 @@ import { apiController } from "../../Controller/ApiController/apiController";
 import { getRandomCarColor, getRandomCarName } from "../../utils/generateRandomCars";
 import { CreationForm } from "./components/Creation-form/CreationForm";
 import { Race } from "./components/Race/Race";
-import { CreateCarType, GaragePropsType } from "./garage.types";
+import { CarType, CreateCarType, GaragePropsType } from "./garage.types";
 // import { Autos } from "./components/Autos/Autos";
 // import createCarImg from '../../utils/createCarImg'
 
@@ -16,11 +16,22 @@ export class Garage extends BaseComponent {
         super(props);
         this.creationForm = new CreationForm();
         this.creationForm.renderTo(this.getElement());
-        this.race = new Race({ tagName: "div", parentNode: this.element });
+        this.race = new Race({ tagName: "div", parentNode: this.element, selectCar: this.selectCar });
         this.race.renderTracksInRace();
         this.creationForm.generateCarsButton.addEventListener("click", this.generateRandomCars);
         this.creationForm.createButton.addEventListener("click", this.createCar);
+        this.creationForm.updButton.addEventListener("click", this.updateCar);
     }
+
+    selectCar = (carData: CarType) => () => {
+        this.creationForm.setSelectedCar(carData);
+    };
+
+    updateCar = () => {
+        this.creationForm.updateCarInForm().then(()=>{
+            this.race.renderTracksInRace()
+        })
+    };
 
     generateRandomCars = () => {
         const promiseArr = [];
@@ -45,5 +56,6 @@ export class Garage extends BaseComponent {
         apiController.addCar(Car);
         this.race.renderTracksInRace();
         this.creationForm.createInput.value = "";
+        this.creationForm.createColorInput.value = "";
     };
 }
