@@ -21,6 +21,8 @@ export class Garage extends BaseComponent {
         this.creationForm.generateCarsButton.addEventListener("click", this.generateRandomCars);
         this.creationForm.createButton.addEventListener("click", this.createCar);
         this.creationForm.updButton.addEventListener("click", this.updateCar);
+        this.creationForm.raceButton.addEventListener("click", this.raceHandler);
+        this.creationForm.resetButton.addEventListener("click", this.resetHandler);
     }
 
     selectCar = (carData: CarType) => () => {
@@ -28,9 +30,25 @@ export class Garage extends BaseComponent {
     };
 
     updateCar = () => {
-        this.creationForm.updateCarInForm().then(()=>{
-            this.race.renderTracksInRace()
-        })
+        this.creationForm.updateCarInForm().then(() => {
+            this.race.renderTracksInRace();
+        });
+    };
+
+    raceHandler = () => {
+        this.creationForm.resetButton.disabled = false;
+        this.creationForm.raceButton.disabled = true;
+        this.race.trackInstances.forEach((track) => {
+            track.startEngine();
+        });
+    };
+
+    resetHandler = () => {
+        this.creationForm.resetButton.disabled = true;
+        this.creationForm.raceButton.disabled = false;
+        this.race.trackInstances.forEach((track) => {
+            track.stopEngine();
+        });
     };
 
     generateRandomCars = () => {

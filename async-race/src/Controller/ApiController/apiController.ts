@@ -1,8 +1,11 @@
 import { CarType, CreateCarType } from "../../View/Garage/garage.types";
 import { createQueryString } from "../../utils/createQueryString";
-import { GetCarsQueryType } from "./apiController.types";
+import { CarStartParams, GetCarsQueryType, IQueryParam } from "./apiController.types";
 
 const BASE_URL = "http://127.0.0.1:3000";
+const generateQueryString = (queryParams: IQueryParam[] = []): string => 
+    queryParams.length ? `?${queryParams.map((x): string => `${x.key}=${x.value}`).join('&')}` : '';
+
 
 export const apiController = {
     cars: [],
@@ -38,4 +41,32 @@ export const apiController = {
             method: "DELETE",
         });
     },
-};
+    startStopEngine: async (id: number, status: 'started' | 'stopped'): Promise<CarStartParams> => {
+        const queryArr: IQueryParam[] = [
+            { key: 'id', value: `${id}` },
+            { key: 'status', value: `${status}` },
+        ];
+        const URL = `${BASE_URL}/engine/${generateQueryString(queryArr)}`;
+        const resp: Response = await fetch(URL, {
+            method: 'PATCH',
+        });
+        const data: CarStartParams = await resp.json();
+        return data;
+
+    },
+    switchDriveMode: async (id:number): Promise<unknown> => {
+        const queryArr: IQueryParam[] = [
+            { key: 'id', value: `${id}` },
+            { key: 'status', value: 'drive' },
+        ];
+        const URL = `${BASE_URL}/engine/${generateQueryString(queryArr)}`;
+        const resp: Response = await fetch(URL, {
+            method: 'PATCH',
+        });
+        return new Promise((resolve, rejected): void => {
+            if (resp.ok) {
+                resolve(resp);
+            } else rejected(resp);
+        })
+}
+}

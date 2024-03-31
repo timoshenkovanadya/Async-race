@@ -1,5 +1,6 @@
 import { BaseComponent } from "../../../../Components/Base-component/base-component";
 import { apiController } from "../../../../Controller/ApiController/apiController";
+import { CarStartParams } from "../../../../Controller/ApiController/apiController.types";
 import { CarType } from "../../garage.types";
 import { Track } from "../Track/Track";
 import { RacePropsType, SelectCarType } from "./race.types";
@@ -46,7 +47,7 @@ export class Race extends BaseComponent {
             parentNode: this.element,
         });
 
-        this.prevButton.setOnclick(this.addPaginationPrev)
+        this.prevButton.setOnclick(this.addPaginationPrev);
 
         this.nextButton = new BaseComponent({
             tagName: "button",
@@ -72,24 +73,23 @@ export class Race extends BaseComponent {
         this.trackInstances = carsArr.map((car) => new Track({ parentNode: this.element, ...car }));
         this.trackInstances.forEach((track) => {
             track.removeButton.setOnclick(this.deleteTrack(track.carId));
-            track.selectButton.setOnclick(this.selectCar(track.carData))
+            track.selectButton.setOnclick(this.selectCar(track.carData));
         });
     };
 
     renderTracksInRace = async () => {
-        const page = this.currentPage; 
+        const page = this.currentPage;
         const { cars, count } = await apiController.getCars({ _limit: 7, _page: page });
         this.clearAllTracks();
         this.renderTracks(cars);
         this.changeCarsCount(count);
-        
     };
 
     changeCarsCount = (count: string) => {
         this.raceTitle.setTextContent(`Garage (${count || 0})`);
     };
 
-     clearAllTracks = () => {
+    clearAllTracks = () => {
         this.carsData = [];
         this.trackInstances.forEach((track) => track.destroy());
         this.trackInstances = [];
@@ -98,14 +98,13 @@ export class Race extends BaseComponent {
     addPaginationPrev = () => {
         if (this.currentPage !== 1) {
             this.currentPage -= 1;
-            this.nextButton.setAttribute({ name: 'disabled', value: 'false' });;
+            // this.nextButton.setAttribute({ name: 'disabled', value: 'false' });
             this.renderTracksInRace();
             this.pageNumber.setTextContent(`Page #${this.currentPage}`);
         }
         if (this.currentPage === 1) {
-            this.prevButton.setAttribute({ name: 'disabled', value: 'true' });
-        };
-        
+            // this.prevButton.setAttribute({ name: 'disabled', value: 'true' });
+        }
     };
 
     addPaginationNext = async () => {
@@ -115,12 +114,13 @@ export class Race extends BaseComponent {
         const LastPageNumber = Math.ceil(NumOfCars / carOnPage);
         if (this.currentPage !== LastPageNumber) {
             this.currentPage += 1;
-            this.prevButton.setAttribute({ name: 'disabled', value: 'false' });
+            // this.prevButton.setAttribute({ name: 'disabled', value: 'false' });
             this.renderTracksInRace();
             this.pageNumber.setTextContent(`Page #${this.currentPage}`);
         }
         if (this.currentPage === LastPageNumber) {
-            this.nextButton.setAttribute({ name: 'disabled', value: 'true' });
+            // this.nextButton.setAttribute({ name: 'disabled', value: 'true' });
         }
-    }
+    };
+
 }

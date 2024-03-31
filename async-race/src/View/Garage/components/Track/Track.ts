@@ -1,4 +1,6 @@
 import { BaseComponent } from "../../../../Components/Base-component/base-component";
+import { apiController } from "../../../../Controller/ApiController/apiController";
+import { CarStartParams } from "../../../../Controller/ApiController/apiController.types";
 import createCarImg from "../../../../utils/createCarImg";
 import { CarType } from "../../garage.types";
 import { TrackPropsType } from "./track.types";
@@ -20,10 +22,14 @@ export class Track extends BaseComponent {
 
     public carData: CarType;
 
+    public timer: NodeJS.Timeout | null;
+
     constructor({ id, color, name, ...props }: TrackPropsType) {
         super({ tagName: "div", ...props });
 
         this.carId = id;
+
+        this.timer = null;
 
         this.carData = { id, color, name };
 
@@ -48,12 +54,15 @@ export class Track extends BaseComponent {
             classNames: "start-button",
             parentNode: this.element,
         });
+        this.startButton.setOnclick(this.startEngine);
+
         this.stopButton = new BaseComponent({
             tagName: "button",
             textContent: "B",
             classNames: "stop-button",
             parentNode: this.element,
         });
+        this.stopButton.setOnclick(this.stopEngine);
 
         this.carModel = new BaseComponent({
             tagName: "h6",
@@ -65,4 +74,36 @@ export class Track extends BaseComponent {
         this.svg = createCarImg(color, "80", "30");
         this.insertChild(this.svg as unknown as HTMLElement);
     }
+
+    startEngine = (): void => {
+        const startPromise: Promise<CarStartParams> = apiController.startStopEngine(this.carData.id ?? 0, "started");
+        startPromise.then((params: CarStartParams): void => {
+            const BaseTime: number = Date.now();
+            const startProposition: number = 250;
+            const intervalTime: number = 20;
+            const animationTime: number = params.distance / params.velocity;
+            const trackLength: number = this.element.clientWidth - startProposition;
+            const distancePerInterval: number = (trackLength / animationTime) * intervalTime;
+            let currentPosition: number = 0;
+
+            const moveCar = (): void => {
+                const car: SVGSVGElement = this.svg;
+                car.style.transform = `translateX(${(currentPosition += distancePerInterval)}px)`;
+                if (BaseTime + animationTime < Date.now()) {
+                    if (this.timer) clearInterval(this.timer);
+                }
+            };
+            this.timer = setInterval(moveCar, intervalTime);
+            apiController.switchDriveMode(this.carData.id ?? 0).then(null, (): void => {
+                if (this.timer) clearInterval(this.timer);
+            });
+        });
+    };
+
+    stopEngine = (): void => {
+        apiController.startStopEngine(this.carData.id ?? 0, "stopped").then((): void => {
+            if (this.timer) clearInterval(this.timer);
+            this.svg.style.transform = "none";
+        });
+    };
 }

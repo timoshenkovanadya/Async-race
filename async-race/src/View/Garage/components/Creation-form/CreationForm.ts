@@ -52,7 +52,9 @@ export class CreationForm {
         this.resetButton = this.addButton("reset", this.formContainer);
         this.generateCarsButton = this.addButton("generate", this.formContainer);
 
-        this.setDisabled(true);
+        this.resetButton.disabled = true;
+
+        this.setDisabledUpdate(true);
     }
 
     addInput(inputName: string, parent: HTMLElement): HTMLInputElement {
@@ -74,7 +76,7 @@ export class CreationForm {
             });
     };
 
-    setDisabled = (isDisabled: boolean) => {
+    setDisabledUpdate = (isDisabled: boolean) => {
         this.updInput.disabled = isDisabled;
         this.updColorInput.disabled = isDisabled;
         this.updButton.disabled = isDisabled;
@@ -103,14 +105,14 @@ export class CreationForm {
         this.updInput.value = name;
         this.updColorInput.value = color;
         this.updateId = id;
-        this.setDisabled(false);
+        this.setDisabledUpdate(false);
     };
 
     unselectCar = () => {
         this.updInput.value = "";
         this.updColorInput.value = "";
         this.updateId = undefined;
-        this.setDisabled(true);
+        this.setDisabledUpdate(true);
     };
 
     renderTo(parent: HTMLElement): void {
