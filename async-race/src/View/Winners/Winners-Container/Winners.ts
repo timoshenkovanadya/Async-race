@@ -35,6 +35,8 @@ export class Winners extends BaseComponent {
 
     public totalNumOfCars: number;
 
+    public linesElements: BaseComponent[];
+
     constructor(props: WinnersPropsType) {
         super(props);
 
@@ -42,10 +44,11 @@ export class Winners extends BaseComponent {
         this.orderType = "";
         this.sortType = "";
         this.totalNumOfCars = 0;
+        this.linesElements = [];
 
         this.winnersTitle = new BaseComponent({
             tagName: "h4",
-            textContent: "Winners (9)",
+            textContent: "Winners (1)",
             classNames: "winners-title",
             parentNode: this.element,
         });
@@ -132,7 +135,9 @@ export class Winners extends BaseComponent {
             return { ...carData, ...winner };
         });
         const extendedWinnersData = await Promise.all(extendedWinnersPromises);
+        this.linesElements.forEach((line) => line.destroy());
         this.renderLines(extendedWinnersData);
+        this.winnersTitle.setTextContent(`Winners (${extendedWinnersData.length})`)
     };
 
     renderLines = (extendedWinnersData: ExtendedWinnersData[]) => {
@@ -151,6 +156,7 @@ export class Winners extends BaseComponent {
         carTd.insertChild(carImg as unknown as HTMLElement);
         new BaseComponent({ tagName: "td", textContent: wins.toString(), parentNode: tr.getElement() });
         new BaseComponent({ tagName: "td", textContent: time.toString(), parentNode: tr.getElement() });
+        this.linesElements.push(tr);
     };
 
     addPaginationPrev = () => {

@@ -20,13 +20,12 @@ export class App {
         this.garage = new Garage({ tagName: "div", parentNode: this.appContainer });
         this.header = new Header();
         this.winners = new Winners({ tagName: "div", parentNode: this.appContainer });
-        this.header.garageButton.addEventListener('click', () => {
+        this.header.garageButton.addEventListener("click", () => {
             this.renderGarage();
         });
-        this.header.winnersButton.addEventListener('click', () => {
+        this.header.winnersButton.addEventListener("click", () => {
             this.renderWinners();
-        })
-        
+        });
     }
 
     start = () => {
@@ -37,12 +36,11 @@ export class App {
     renderGarage = (): void => {
         this.appContainer.innerHTML = "";
         this.garage.render(this.appContainer);
-        
     };
 
     renderWinners = (): void => {
         this.appContainer.innerHTML = "";
+        this.winners.getWinnersData({ _page: 1, _limit: 10 });
         this.winners.render(this.appContainer);
-        
     };
 }
