@@ -1,6 +1,6 @@
 import { CarType, CreateCarType } from "../../View/Garage/garage.types";
 import { createQueryString } from "../../utils/createQueryString";
-import { CarStartParams, GetCarsQueryType, IQueryParam } from "./apiController.types";
+import { CarStartParams, GetCarsQueryType, ICar, IQueryParam, IWinner } from "./apiController.types";
 
 const BASE_URL = "http://127.0.0.1:3000";
 const generateQueryString = (queryParams: IQueryParam[] = []): string => 
@@ -15,6 +15,13 @@ export const apiController = {
         const count = resp.headers.get("X-Total-Count");
         const cars = (await resp.json()) as CarType[];
         return { cars, count } as { cars: CarType[]; count: string };
+    },
+
+    getCar: async (id: number): Promise<ICar> => {
+        const resp = await fetch(`${BASE_URL}/garage/${id}`, {
+            method: 'GET',
+        });
+        return resp.json();
     },
 
     addCar: async (carData: CreateCarType): Promise<void> => {
@@ -68,5 +75,47 @@ export const apiController = {
                 resolve(resp);
             } else rejected(resp);
         })
+},
+getWinner: async (id: number): Promise<Response> => {
+    const resp = await fetch(`${BASE_URL}/winners/${id}`, {
+        method: 'GET',
+    });
+    return resp;
+},
+
+updWinner: async (winnerData: IWinner, id: number): Promise<void> => {
+    await fetch(`${BASE_URL}/winners/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(winnerData),
+    });
+},
+
+addWinner: async (winnerData: IWinner): Promise<void> => {
+    await fetch (`${BASE_URL}/winners`,{
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json', 
+    },
+    body: JSON.stringify(winnerData),
+});
+},
+
+
+
+getWinnersCars: async (QueryParams: IQueryParam[]): Promise<IWinner[]> => {
+    const URL = `${BASE_URL}/winners/${generateQueryString(QueryParams)}`
+    const resp: Response = await fetch(URL);
+    const data: IWinner[] = await resp.json();
+    return data;
+},
+
+getTotalNumOfWinners: async (QueryParams: IQueryParam[]): Promise<string> => {
+    const URL = `${BASE_URL}/winners/${generateQueryString(QueryParams)}`
+    const resp: Response = await fetch(URL);
+    return resp.headers.get('X-Total-Count') ?? '';
+
 }
 }

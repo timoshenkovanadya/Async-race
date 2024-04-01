@@ -3,6 +3,7 @@ import { apiController } from "../../Controller/ApiController/apiController";
 import { getRandomCarColor, getRandomCarName } from "../../utils/generateRandomCars";
 import { CreationForm } from "./components/Creation-form/CreationForm";
 import { Race } from "./components/Race/Race";
+import { WinnerPromiseType } from "./components/Track/track.types";
 import { CarType, CreateCarType, GaragePropsType } from "./garage.types";
 // import { Autos } from "./components/Autos/Autos";
 // import createCarImg from '../../utils/createCarImg'
@@ -11,6 +12,8 @@ export class Garage extends BaseComponent {
     private creationForm: CreationForm;
 
     private race: Race;
+
+    private modal: BaseComponent;
 
     constructor(props: GaragePropsType) {
         super(props);
@@ -23,6 +26,12 @@ export class Garage extends BaseComponent {
         this.creationForm.updButton.addEventListener("click", this.updateCar);
         this.creationForm.raceButton.addEventListener("click", this.raceHandler);
         this.creationForm.resetButton.addEventListener("click", this.resetHandler);
+        this.modal = new BaseComponent({
+            tagName: "div",
+            textContent: "Hello",
+            classNames: ["modal", "invisible"],
+            parentNode: this.element,
+        });
     }
 
     selectCar = (carData: CarType) => () => {
@@ -38,9 +47,23 @@ export class Garage extends BaseComponent {
     raceHandler = () => {
         this.creationForm.resetButton.disabled = false;
         this.creationForm.raceButton.disabled = true;
+        const promisesArr: Promise<WinnerPromiseType>[] = [];
         this.race.trackInstances.forEach((track) => {
-            track.startEngine();
+            const promise = track.startEngine();
+            promisesArr.push(promise);
         });
+        Promise.race(promisesArr).then((prop) => {
+            const { id, time } = prop;
+            this.modal.setTextContent(`winner id ${id}, time ${(time / 1000).toFixed(2)}s`);
+            this.showModal();
+        });
+    };
+
+    showModal = () => {
+        this.modal.removeClassName("invisible");
+        setTimeout(() => {
+            this.modal.setClassName("invisible");
+        }, 3000);
     };
 
     resetHandler = () => {

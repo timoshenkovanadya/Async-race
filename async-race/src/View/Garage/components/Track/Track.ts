@@ -3,7 +3,7 @@ import { apiController } from "../../../../Controller/ApiController/apiControlle
 import { CarStartParams } from "../../../../Controller/ApiController/apiController.types";
 import createCarImg from "../../../../utils/createCarImg";
 import { CarType } from "../../garage.types";
-import { TrackPropsType } from "./track.types";
+import { TrackPropsType, WinnerPromiseType } from "./track.types";
 
 export class Track extends BaseComponent {
     public svg: SVGSVGElement;
@@ -75,27 +75,31 @@ export class Track extends BaseComponent {
         this.insertChild(this.svg as unknown as HTMLElement);
     }
 
-    startEngine = (): void => {
+    startEngine = () => {
         const startPromise: Promise<CarStartParams> = apiController.startStopEngine(this.carData.id ?? 0, "started");
-        startPromise.then((params: CarStartParams): void => {
-            const BaseTime: number = Date.now();
-            const startProposition: number = 250;
-            const intervalTime: number = 20;
-            const animationTime: number = params.distance / params.velocity;
-            const trackLength: number = this.element.clientWidth - startProposition;
-            const distancePerInterval: number = (trackLength / animationTime) * intervalTime;
-            let currentPosition: number = 0;
+        return new Promise<WinnerPromiseType>((resolve) => {
+            startPromise.then((params: CarStartParams): void => {
+                const BaseTime: number = Date.now();
+                const startProposition: number = 250;
+                const intervalTime: number = 20;
+                const animationTime: number = params.distance / params.velocity;
+                const trackLength: number = this.element.clientWidth - startProposition;
+                const distancePerInterval: number = (trackLength / animationTime) * intervalTime;
 
-            const moveCar = (): void => {
-                const car: SVGSVGElement = this.svg;
-                car.style.transform = `translateX(${(currentPosition += distancePerInterval)}px)`;
-                if (BaseTime + animationTime < Date.now()) {
+                let currentPosition: number = 0;
+
+                const moveCar = (): void => {
+                    const car: SVGSVGElement = this.svg;
+                    car.style.transform = `translateX(${(currentPosition += distancePerInterval)}px)`;
+                    if (BaseTime + animationTime < Date.now()) {
+                        if (this.timer) clearInterval(this.timer);
+                        resolve({ id: this.carData.id, time: animationTime });
+                    }
+                };
+                this.timer = setInterval(moveCar, intervalTime);
+                apiController.switchDriveMode(this.carData.id ?? 0).then(null, (): void => {
                     if (this.timer) clearInterval(this.timer);
-                }
-            };
-            this.timer = setInterval(moveCar, intervalTime);
-            apiController.switchDriveMode(this.carData.id ?? 0).then(null, (): void => {
-                if (this.timer) clearInterval(this.timer);
+                });
             });
         });
     };
