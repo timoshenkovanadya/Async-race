@@ -65,7 +65,9 @@ export class Garage extends BaseComponent {
     sendWinner = async (prop: Omit<IWinner, "wins">) => {
         const winnerHistory = await apiController.getWinner(prop.id);
         if (winnerHistory.id) {
-            apiController.updWinner({ ...winnerHistory, wins: winnerHistory.wins + 1 } as IWinner);
+            const time = winnerHistory.time < prop.time ? winnerHistory.time : prop.time;
+            const wins = winnerHistory.wins + 1;
+            apiController.updWinner({ ...winnerHistory, wins, time } as IWinner);
         } else {
             apiController.addWinner({ ...prop, wins: 1 });
         }
