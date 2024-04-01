@@ -1,8 +1,8 @@
 import { BaseComponent } from "../../../Components/Base-component/base-component";
 import { apiController } from "../../../Controller/ApiController/apiController";
-import { ICar, IQueryParam, IWinner } from "../../../Controller/ApiController/apiController.types";
+import { IQueryParam } from "../../../Controller/ApiController/apiController.types";
 import createCarImg from "../../../utils/createCarImg";
-import { WinnersPropsType } from "./winners.types";
+import { ExtendedWinnersData, GetWinnersArgType, WinnersPropsType } from "./winners.types";
 
 export class Winners extends BaseComponent {
     public tableWrap: BaseComponent;
@@ -58,39 +58,39 @@ export class Winners extends BaseComponent {
         });
 
         this.tableWrap = new BaseComponent({
-            tagName: "div",
+            tagName: "table",
             classNames: "winners-table",
             parentNode: this.element,
         });
         this.tableTitle = new BaseComponent({
-            tagName: "div",
+            tagName: "tr",
             classNames: "table-title-wrap",
             parentNode: this.tableWrap.getElement(),
         });
 
         this.Number = new BaseComponent({
-            tagName: "div",
+            tagName: "th",
             textContent: "Number",
             classNames: "table-title",
             parentNode: this.tableTitle.getElement(),
         });
 
         this.name = new BaseComponent({
-            tagName: "div",
+            tagName: "th",
             textContent: "Name",
             classNames: "table-title",
             parentNode: this.tableTitle.getElement(),
         });
 
         this.carImg = new BaseComponent({
-            tagName: "div",
+            tagName: "th",
             textContent: "Car",
             classNames: "table-title",
             parentNode: this.tableTitle.getElement(),
         });
 
         this.winsSortButton = new BaseComponent({
-            tagName: "div",
+            tagName: "th",
             textContent: "Wins",
             classNames: "table-title",
             parentNode: this.tableTitle.getElement(),
@@ -98,7 +98,7 @@ export class Winners extends BaseComponent {
         this.winsSortButton.setAttribute({ name: "dataset.type", value: "wins" });
 
         this.timeSortButton = new BaseComponent({
-            tagName: "div",
+            tagName: "th",
             textContent: "Best time (seconds)",
             classNames: "table-title",
             parentNode: this.tableTitle.getElement(),
@@ -118,7 +118,40 @@ export class Winners extends BaseComponent {
             classNames: "next-button",
             parentNode: this.element,
         });
+        this.getWinnersData({ _page: 1, _limit: 10 });
     }
+
+    getWinnersData = async (params: GetWinnersArgType) => {
+        const requestParams = Object.keys(params).map((key) => ({
+            key,
+            value: params[key as keyof GetWinnersArgType],
+        }));
+        const winnersData = await apiController.getWinnersCars(requestParams as IQueryParam[]);
+        const extendedWinnersPromises = winnersData.map(async (winner) => {
+            const carData = await apiController.getCar(winner.id);
+            return { ...carData, ...winner };
+        });
+        const extendedWinnersData = await Promise.all(extendedWinnersPromises);
+        this.renderLines(extendedWinnersData);
+    };
+
+    renderLines = (extendedWinnersData: ExtendedWinnersData[]) => {
+        extendedWinnersData.forEach((data, index) => {
+            this.getLine({ ...data, index });
+        });
+    };
+
+    getLine = (data: ExtendedWinnersData & { index: number }) => {
+        const { wins, time, name, color, index } = data;
+        const tr = new BaseComponent({ tagName: "tr", parentNode: this.tableWrap.getElement() });
+        new BaseComponent({ tagName: "td", textContent: (index + 1).toString(), parentNode: tr.getElement() });
+        new BaseComponent({ tagName: "td", textContent: name, parentNode: tr.getElement() });
+        const carTd = new BaseComponent({ tagName: "td", parentNode: tr.getElement() });
+        const carImg = createCarImg(color, "80", "30");
+        carTd.insertChild(carImg as unknown as HTMLElement);
+        new BaseComponent({ tagName: "td", textContent: wins.toString(), parentNode: tr.getElement() });
+        new BaseComponent({ tagName: "td", textContent: time.toString(), parentNode: tr.getElement() });
+    };
 
     addPaginationPrev = () => {
         if (this.currentPage !== 1) {
@@ -145,8 +178,4 @@ export class Winners extends BaseComponent {
             // this.nextButton.setAttribute({ name: 'disabled', value: 'true' });
         }
     };
-
 }
-
-    
-

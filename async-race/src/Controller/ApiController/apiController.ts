@@ -5,6 +5,9 @@ import { CarStartParams, GetCarsQueryType, ICar, IQueryParam, IWinner } from "./
 const BASE_URL = "http://127.0.0.1:3000";
 const generateQueryString = (queryParams: IQueryParam[] = []): string =>
     queryParams.length ? `?${queryParams.map((x): string => `${x.key}=${x.value}`).join("&")}` : "";
+// const paramsObjToArr = (obj: object) => {
+//     return Object.entries(obj).map([key, value] => ({key, value}))
+// }
 
 export const apiController = {
     cars: [],
@@ -102,8 +105,8 @@ export const apiController = {
         });
     },
 
-    getWinnersCars: async (QueryParams: IQueryParam[]): Promise<IWinner[]> => {
-        const URL = `${BASE_URL}/winners/${generateQueryString(QueryParams)}`;
+    getWinnersCars: async (queryParams: IQueryParam[]): Promise<IWinner[]> => {
+        const URL = `${BASE_URL}/winners/${generateQueryString(queryParams)}`;
         const resp: Response = await fetch(URL);
         const data: IWinner[] = await resp.json();
         return data;

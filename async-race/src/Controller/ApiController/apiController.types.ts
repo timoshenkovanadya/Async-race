@@ -18,6 +18,5 @@ export interface IWinner {
 export interface ICar {
     name: string;
     color: string;
-    id?: number;
-    lastTime?: number;
+    id: number;
 }

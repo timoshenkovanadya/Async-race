@@ -37,12 +37,12 @@ body {
     margin-top: 5px;
     margin-bottom: 5px;
 }
-.table-title-wrap {
+/* .table-title-wrap {
     display: flex;
     flex-direction: row;
     gap: 5px;
-}
-.table-title {
+} */
+table > * {
     font-size: 14px;
     color: aliceblue;
 }
