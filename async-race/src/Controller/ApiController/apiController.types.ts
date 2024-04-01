@@ -9,10 +9,11 @@ export interface CarStartParams {
 }
 
 export interface IWinner {
-wins: number;
-time: number;
-id?: number;
+    wins: number;
+    time: number;
+    id: number;
 }
+
 
 export interface ICar {
     name: string;

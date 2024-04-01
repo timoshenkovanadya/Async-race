@@ -3,4 +3,4 @@ import { CarType } from "../../garage.types";
 
 export type TrackPropsType = Omit<BaseComponentProps, "tagName"> & CarType;
 
-export type WinnerPromiseType = { id: number; time: number };
+export type WinnerPromiseType = { id: number; time: number; name: string };

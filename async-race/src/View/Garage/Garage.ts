@@ -1,5 +1,6 @@
 import { BaseComponent } from "../../Components/Base-component/base-component";
 import { apiController } from "../../Controller/ApiController/apiController";
+import { IWinner } from "../../Controller/ApiController/apiController.types";
 import { getRandomCarColor, getRandomCarName } from "../../utils/generateRandomCars";
 import { CreationForm } from "./components/Creation-form/CreationForm";
 import { Race } from "./components/Race/Race";
@@ -53,10 +54,21 @@ export class Garage extends BaseComponent {
             promisesArr.push(promise);
         });
         Promise.race(promisesArr).then((prop) => {
-            const { id, time } = prop;
-            this.modal.setTextContent(`winner id ${id}, time ${(time / 1000).toFixed(2)}s`);
+            const { id, time, name } = prop;
+            const seconds = Number((time / 1000).toFixed(2));
+            this.modal.setTextContent(`Winner ${name}, time ${seconds}s`);
             this.showModal();
+            this.sendWinner({ id, time: seconds });
         });
+    };
+
+    sendWinner = async (prop: Omit<IWinner, "wins">) => {
+        const winnerHistory = await apiController.getWinner(prop.id);
+        if (winnerHistory.id) {
+            apiController.updWinner({ ...winnerHistory, wins: winnerHistory.wins + 1 } as IWinner);
+        } else {
+            apiController.addWinner({ ...prop, wins: 1 });
+        }
     };
 
     showModal = () => {
@@ -67,6 +79,7 @@ export class Garage extends BaseComponent {
     };
 
     resetHandler = () => {
+        this.modal.setClassName("invisible");
         this.creationForm.resetButton.disabled = true;
         this.creationForm.raceButton.disabled = false;
         this.race.trackInstances.forEach((track) => {

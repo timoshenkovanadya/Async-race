@@ -93,7 +93,7 @@ export class Track extends BaseComponent {
                     car.style.transform = `translateX(${(currentPosition += distancePerInterval)}px)`;
                     if (BaseTime + animationTime < Date.now()) {
                         if (this.timer) clearInterval(this.timer);
-                        resolve({ id: this.carData.id, time: animationTime });
+                        resolve({ id: this.carData.id, time: animationTime, name: this.carData.name });
                     }
                 };
                 this.timer = setInterval(moveCar, intervalTime);
