@@ -114,6 +114,7 @@ export class Winners extends BaseComponent {
             classNames: "prev-button",
             parentNode: this.element,
         });
+        this.winnersPrevButton.setOnclick(this.addPaginationPrev);
 
         this.winnersNextButton = new BaseComponent({
             tagName: "button",
@@ -121,6 +122,8 @@ export class Winners extends BaseComponent {
             classNames: "next-button",
             parentNode: this.element,
         });
+        this.winnersNextButton.setOnclick(this.addPaginationNext);
+
         this.getWinnersData({ _page: 1, _limit: 10 });
     }
 
@@ -162,8 +165,7 @@ export class Winners extends BaseComponent {
     addPaginationPrev = () => {
         if (this.currentPage !== 1) {
             this.currentPage -= 1;
-            // this.nextButton.setAttribute({ name: 'disabled', value: 'false' });
-            // this.renderTracksInRace();
+        
             this.pageTitle.setTextContent(`Page #${this.currentPage}`);
         }
         if (this.currentPage === 1) {
